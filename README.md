@@ -36,4 +36,29 @@ Este código foi desenvolvido para rodar no ambiente de desenvolvimento integrad
 4. Compile, execute e acompanhe o comportamento dos motores pelo terminal.
 
 ---
-👨‍💻 **Desenvolvido por:** Gabriel Mota
+# 🏥 Monitoramento de Sinais Vitais em UTI com FreeRTOS
+
+> Miniprojeto desenvolvido para a disciplina de **Sistemas Operacionais Ciberfísicos** (Bacharelado em Ciência da Computação - PUCPR).
+
+![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
+![FreeRTOS](https://img.shields.io/badge/FreeRTOS-20232A?style=for-the-badge&logo=freertos&logoColor=green)
+
+## 📖 Sobre o Projeto
+Este projeto implementa um sistema de tempo real crítico para o monitoramento de pacientes em Unidades de Terapia Intensiva (UTIs). Utilizando o **FreeRTOS**, o equipamento simula a coleta e análise de três sinais vitais essenciais através de tarefas concorrentes, gerando alertas automáticos no console caso os dados do paciente fujam dos limites de normalidade.
+
+## ⚙️ Sinais Vitais e Regras de Alerta
+O sistema é composto por três *tasks* independentes rodando com a mesma prioridade. Os dados de cada sinal biológico são gerados de maneira aleatória por sensores simulados a cada **1 segundo**.
+
+| Sinal Vital | Parâmetro de Inicialização | Condições de Alerta |
+| :--- | :--- | :--- |
+| ❤️ **Frequência Cardíaca** | `"Batimentos:"` | **Bradicardia:** ≤ 50 bpm <br> **Normal:** 51 a 110 bpm <br> **Taquicardia:** > 110 bpm |
+| 🩸 **Saturação Sanguínea** | `"Saturação:"` | **Baixa:** < 90% <br> **Atenção:** 90% a 94% <br> **Normal:** ≥ 95% |
+| 🌡️ **Temperatura** | `"Temperatura:"` | **Hipotermia:** < 35.5 °C <br> **Normal:** 35.5 °C a 37.0 °C <br> **Febre:** > 37.0 °C |
+
+## 🚀 Arquitetura e Implementação
+1. **Geração de Dados:** Cada tarefa utiliza funções de geração de números aleatórios internamente em seu loop para simular a aferição contínua dos sinais vitais.
+2. **Passagem de Parâmetros e Saída:** Os rótulos de leitura são passados para as tarefas através do ponteiro de inicialização. A impressão dos resultados consolidados e numéricos no terminal é feita via `vPrintStringAndNumber()`.
+3. **Temporização:** Para satisfazer a restrição de tempo real, todas as medições ocorrem em uma janela fixa através do uso de `vTaskDelay(pdMS_TO_TICKS(1000))` no final do ciclo, garantindo leituras a cada 1 segundo exato. As tarefas também possuem configuração de exclusão explícita com `vTaskDelete()`.
+
+---
+👨‍💻 **Desenvolvido por:** Gabriel Mota 
